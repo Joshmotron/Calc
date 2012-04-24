@@ -5,6 +5,7 @@
 #include <stack>
 #include <cctype>
 #include <iostream>
+#include <cstdlib>
 using namespace std;
 // Calculator implements a basic four function calculator
 // valid keys are the digits (0-9), '+', '-', '*', '/', and '='
@@ -35,6 +36,7 @@ class Calculator
     bool     process_digit(const char ch);      // function to process a single digit
     bool     process_operator(const char ch);   // function to process an operation key
     bool     process_memory(const char ch);     // function to do (optional) memory operation(s)
+    double   process_numbers();
     int      getPrecedence(char operatorChar) const;
 };
 

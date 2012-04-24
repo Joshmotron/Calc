@@ -27,9 +27,14 @@ bool Calculator::press_key(const char key)
             return process_operator(key);
             break;
         case '(':
+            operandStack.push(key);
+            break;
         case ')':
+            operandStack.push(key);
+            break;
         case '=':
             return process_operator(key);
+            break;
         case 's':
         case 'S':
         case 'r':
@@ -53,6 +58,24 @@ bool Calculator::process_digit(const char key)
     return true;
 }
 
+double Calculator::process_numbers() {
+    double temp = 0;
+    int multiple = 1;
+
+    if (operandStack.top() == ')') {
+        operandStack.pop();
+        while (operandStack.top() != '(') {
+            temp += operandStack.top() * multiple;
+            operandStack.pop();
+            multiple *= 10;
+        }
+    } else {
+        temp = operandStack.top();
+    }
+
+    return temp;
+}
+
 bool Calculator::process_operator(const char key)
 {
     int stackTopPrecedence;
@@ -69,10 +92,10 @@ bool Calculator::process_operator(const char key)
     while (!operatorStack.empty() && getPrecedence(operatorStack.top()) >= getPrecedence(key))
     {
         // This code does not do any error handling
-        rightHandOperand = operandStack.top();
+        rightHandOperand = process_numbers();
         operandStack.pop();
 
-        leftHandOperand  = operandStack.top();
+        leftHandOperand  = process_numbers();
         operandStack.pop();
 
         operation = operatorStack.top();
